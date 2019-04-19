@@ -14,3 +14,17 @@
 Route::get('/', function () {
     return view('welcome');
 });
+
+Auth::routes();
+
+Route::get('/home', 'HomeController@index')->name('home');
+//购物车列表
+Route::get('cart', 'CartController@cartlist');
+//购物车添加
+Route::get('add/cart/{id?}', 'CartController@addcart');
+//生成订单
+Route::get('add/order', 'OrderController@index');
+//订单列表
+Route::get('order/list', 'OrderController@list');
+//微信支付
+Route::get('weixin/pay/{id}', 'WxPayController@pay');
