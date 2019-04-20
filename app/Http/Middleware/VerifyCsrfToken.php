@@ -19,6 +19,6 @@ class VerifyCsrfToken extends Middleware
      * @var array
      */
     protected $except = [
-        '/Weixin/pay_notify/'
+        '/Weixin/pay_notify'
     ];
 }

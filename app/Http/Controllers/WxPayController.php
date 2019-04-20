@@ -39,7 +39,7 @@ class WxPayController extends Controller
             'notify_url' => $this->notify,
             'trade_type' => 'NATIVE'
         ];
-//        print_r($data);die;
+        print_r($data);die;
 
         //签名
         $this->values = [];
@@ -179,7 +179,8 @@ class WxPayController extends Controller
             //验证签名
             $sign = true;
             if($sign){       //签名验证成功
-                Order::where('order_sn',$xml->out_trade_no)->update(['pay_time'=>time()]);
+                $pay_time = strtotime($xml->time_end);
+                Order::where('order_sn',$xml->out_trade_no)->update(['pay_time'=>$pay_time,'pay_amount'=>$xml->cash_fee]);
             }else{
                 //TODO 验签失败
                 $arr =  '验签失败，IP: '.$_SERVER['REMOTE_ADDR'];
