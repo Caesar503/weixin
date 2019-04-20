@@ -34,7 +34,7 @@ class WxPayController extends Controller
             'sign_type' => 'MD5',                //签名类型
             'body' => '开发测试-'.mt_rand(111,999).Str::random(6),
             'out_trade_no' => $order,
-            'total_fee' => $fee,
+            'total_fee' => 1,
             'spbill_create_ip' =>  $_SERVER['REMOTE_ADDR'],
             'notify_url' => $this->notify,
             'trade_type' => 'NATIVE'
@@ -179,11 +179,11 @@ class WxPayController extends Controller
             //验证签名
             $sign = true;
             if($sign){       //签名验证成功
-                //TODO 逻辑处理  订单状态更新
+                Order::where('order_sn',$xml->out_trade_no)->update(['pay_time'=>time()]);
             }else{
                 //TODO 验签失败
-                echo '验签失败，IP: '.$_SERVER['REMOTE_ADDR'];
-                // TODO 记录日志
+                $arr =  '验签失败，IP: '.$_SERVER['REMOTE_ADDR'];
+                file_put_contents('logs/wx_pay_error.log',$arr,FILE_APPEND);
             }
         }
         $response = '<xml><return_code><![CDATA[SUCCESS]]></return_code><return_msg><![CDATA[OK]]></return_msg></xml>';
