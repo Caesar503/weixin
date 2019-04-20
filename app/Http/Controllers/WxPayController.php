@@ -39,7 +39,7 @@ class WxPayController extends Controller
             'notify_url' => $this->notify,
             'trade_type' => 'NATIVE'
         ];
-        print_r($data);die;
+//        print_r($data);die;
 
         //签名
         $this->values = [];
