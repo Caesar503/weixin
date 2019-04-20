@@ -34,3 +34,5 @@ Route::get('weixin/pay/{id}', 'WxPayController@pay');
 Route::get('find/pay/{id}', 'WxPayController@findpay');
 //支付成功
 Route::get('/pay/success/{id}', 'WxPayController@success');
+//回调
+Route::get('/Weixin/pay_notify/', 'WxPayController@pay_notify');
