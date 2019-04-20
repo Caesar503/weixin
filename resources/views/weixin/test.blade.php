@@ -99,6 +99,22 @@
 <script src="/js/qrcode.js"></script>
 <script type="text/javascript">
     new QRCode(document.getElementById("qrcode"),"{{$url}}");
+    setInterval("find()",2000);
+    function find(){
+        $.ajax({
+            url:'/find/pay/{{$oid}}',
+            async:true,
+            type:'get',
+            success:function(res){
+//                console.log(res.code);
+                if(res.code==200){
+                    alert('支付成功');
+                    location.href='/pay/success/{{$oid}}'
+                }
+            },
+            dataType:'json'
+        })
+    }
 </script>
 </body>
 </html>

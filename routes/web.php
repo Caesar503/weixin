@@ -28,3 +28,9 @@ Route::get('add/order', 'OrderController@index');
 Route::get('order/list', 'OrderController@list');
 //微信支付
 Route::get('weixin/pay/{id}', 'WxPayController@pay');
+
+
+//查询支付状态
+Route::get('find/pay/{id}', 'WxPayController@findpay');
+//支付成功
+Route::get('/pay/success/{id}', 'WxPayController@success');

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Model\Order;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
 class WxPayController extends Controller
 {
@@ -54,7 +55,7 @@ class WxPayController extends Controller
         $res = simplexml_load_string($res);
         $url = $res->code_url;
 
-        return view('weixin.test',['url'=>$url]);
+        return view('weixin.test',['url'=>$url,'oid'=>$orderinfo->id]);
     }
     public function SetSign()
     {
@@ -141,6 +142,31 @@ class WxPayController extends Controller
             curl_close($ch);
             die("curl出错，错误码:$error");
         }
+    }
+    //查询支付状态
+    public function findpay($id){
+       $pay = Order::where(['id'=>$id,'uid'=>Auth::id()])->first();
+        if($pay){
+            if($pay->pay_time>0){
+                $data = [
+                    'status'=>'success',
+                    'code'=>200
+                ];
+            }else{
+                $data = [
+                    'status'=>'fail',
+                    'code'=>45
+                ];
+            }
+        }else{
+            die('订单不存在');
+        }
+
+        return json_encode($data);
+    }
+    //支付成功
+    public function success($id){
+        echo '<h3>'.'OrderID:'.$id.'支付成功'.'</h3>';
     }
     public function pay_notify()
     {
