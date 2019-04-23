@@ -5,7 +5,6 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Storage;
-use Monolog\Handler\Curl;
 class WxJcontroller extends Controller
 {
     public function test()
@@ -31,19 +30,8 @@ class WxJcontroller extends Controller
     //下载
     public function download()
     {
-//        $url = "https://api.weixin.qq.com/cgi-bin/media/get?access_token=".get_wx_access()."&media_id=".$_GET['mid'];
-//        $data = file_get_contents($url);
-        $accessToken = get_wx_access();
-        $savePathFile = '/weixin'.date('YmdHis').'.jpg';
-        $targetName = $savePathFile;
-        $ch = curl_init();
-        curl_setopt($ch, CURLOPT_CUSTOMREQUEST, 'GET');
-        $fp = fopen($targetName,'wb');
-        curl_setopt($ch,CURLOPT_URL,"http://file.api.weixin.qq.com/cgi-bin/media/get?access_token={$accessToken}&media_id=".$_GET['mid']);
-        curl_setopt($ch,CURLOPT_FILE,$fp);
-        curl_setopt($ch,CURLOPT_HEADER,0);
-        curl_exec($ch);
-        curl_close($ch);
-        fclose($fp);
+        $url = "https://api.weixin.qq.com/cgi-bin/media/get?access_token=".get_wx_access()."&media_id=".$_GET['mid'];
+        $data = file_get_contents($url);
+        file_put_contents('/weixin/',$data);
     }
 }
