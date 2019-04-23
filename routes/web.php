@@ -36,3 +36,9 @@ Route::get('find/pay/{id}', 'WxPayController@findpay');
 Route::get('/pay/success/{id}', 'WxPayController@success');
 //回调
 Route::post('/Weixin/pay_notify', 'WxPayController@pay_notify');
+
+
+//浏览量
+Route::get('/goods/history/{id?}', 'GoodsController@history');
+//浏览量排行
+Route::get('/goods/getscore', 'GoodsController@getscore');
