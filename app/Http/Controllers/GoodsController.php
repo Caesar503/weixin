@@ -30,7 +30,7 @@ class GoodsController extends Controller
         Redis::zadd($k,$view_count,$id);
         //浏览历史
         $kk = 'history:view';
-        Redis::lpushx($kk,$id);
+        Redis::lpush($kk,$id);
         $arr = Redis::lrange($kk,0,-1);
         $arr = array_unique($arr);
 //        dump($arr);
