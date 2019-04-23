@@ -42,3 +42,7 @@ Route::post('/Weixin/pay_notify', 'WxPayController@pay_notify');
 Route::get('/goods/history/{id?}', 'GoodsController@history');
 //浏览量排行
 Route::get('/goods/getscore', 'GoodsController@getscore');
+
+
+//jssdk
+Route::get('/weixin/jssdk', 'WxJController@test');
