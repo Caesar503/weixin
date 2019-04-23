@@ -8,6 +8,7 @@
 
 
     <button id="btu">选择图片</button>
+    <button id="share">点击分享</button>
     <img src="" alt="" id="img0">
     <hr>
     <img src="" alt="" id="img1">
@@ -58,6 +59,17 @@
                 }
             });
         });
+        $('#share').click(function(){
+            wx.onMenuShareTimeline({
+                title: '标题', // 分享标题
+                link: "{{$a_config['url']}}", // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
+                imgUrl: '', // 分享图标
+                success: function (res){
+                    console.log(res);
+                }
+            }）
+        })
+
     })
 </script>
 </body>

@@ -24,6 +24,7 @@ class WxJcontroller extends Controller
             'timestamp'=>$time, // 必填，生成签名的时间戳
             'nonceStr'=>$nonceStr, // 必填，生成签名的随机串
             'signature' => $signature,// 必填，签名
+            'url'=>$url
         ];
         return view('weixin.jssdk',['a_config'=>$config]);
     }
