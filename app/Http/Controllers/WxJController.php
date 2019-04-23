@@ -29,7 +29,7 @@ class WxJcontroller extends Controller
     //下载
     public function download()
     {
-        $url = "https://api.weixin.qq.com/cgi-bin/media/get?access_token=".get_wx_access()."&media_id=".$_GET;
+        $url = "https://api.weixin.qq.com/cgi-bin/media/get?access_token=".get_wx_access()."&media_id=".$_GET['serverId'];
         echo $url;
     }
 }
