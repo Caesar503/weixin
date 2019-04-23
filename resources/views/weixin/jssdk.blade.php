@@ -22,7 +22,7 @@
         timestamp:"{{$a_config['timestamp']}}", // 必填，生成签名的时间戳
         nonceStr: "{{$a_config['nonceStr']}}", // 必填，生成签名的随机串
         signature: "{{$a_config['signature']}}",// 必填，签名
-        jsApiList: ['chooseImage','uploadImage'] // 必填，需要使用的JS接口列表
+        jsApiList: ['chooseImage','uploadImage','onMenuShareTimeline'] // 必填，需要使用的JS接口列表
     });
     wx.ready(function(){
         $('#btu').click(function(){
