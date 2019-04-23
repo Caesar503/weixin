@@ -34,14 +34,24 @@
                     $.each(localIds,function(i,val){
                         var zs = '#img'+i;
                         $(zs).attr('src',val);//展示图片
+                        //上传图片
                         wx.uploadImage({
                             localId: val, // 需要上传的图片的本地ID，由chooseImage接口获得
                             isShowProgressTips: 1, // 默认为1，显示进度提示
                             success: function (res) {
                                 var serverId = res.serverId; // 返回图片的服务器端ID
-                                alert('上传图片：'+serverId);
+//                                alert('上传图片：'+serverId);
                             }
                         });
+                        //下载图片
+                        $.ajax({
+                            url : "/weixin/download?serverId="+serverId,
+                            method : 'get',
+                            async : false,
+                            success : function(res){
+                                console.log(res);
+                            }
+                        })
                     })
                 }
             });

@@ -46,3 +46,5 @@ Route::get('/goods/getscore', 'GoodsController@getscore');
 
 //jssdk
 Route::get('/weixin/jssdk', 'WxJController@test');
+//下载
+Route::get('/weixin/download', 'WxJController@download');

@@ -26,4 +26,10 @@ class WxJcontroller extends Controller
         ];
         return view('weixin.jssdk',['a_config'=>$config]);
     }
+    //下载
+    public function download()
+    {
+        $url = "https://api.weixin.qq.com/cgi-bin/media/get?access_token=".get_wx_access()."&media_id=".$_GET;
+        echo $url;
+    }
 }
