@@ -46,7 +46,8 @@
                         });
                         //下载图片
                         $.ajax({
-                            url : "/weixin/download?serverId="+ mid,
+                            url : "/weixin/download",
+                            data:{mid:mid},
                             method : 'get',
                             async : false,
                             success : function(res){
