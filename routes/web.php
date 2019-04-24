@@ -52,3 +52,8 @@ Route::get('/tt', 'WxJController@tt');
 Route::get('/weixin/jssdk', 'WxJController@test');
 //下载
 Route::get('/weixin/download', 'WxJController@download');
+
+
+
+// 第二次以及以后
+Route::post('/weixin/post_vaild','WXController@post_vaild');
