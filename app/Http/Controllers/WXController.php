@@ -70,10 +70,17 @@ class WXController extends Controller
     }
     public function getuser()
     {
-      print_r($_GET);
+//      print_r($_GET);
         //用code 换取 网页access_token
         $url= "https://api.weixin.qq.com/sns/oauth2/access_token?appid=".env('WX_APPID')."&secret=".env('WX_APPSECRET')."&code=".$_GET['code']."&grant_type=authorization_code";
         $access = json_decode(file_get_contents($url),true);
         print_r($access);
+        echo "<hr>";
+//        通过access_token和openid拉取用户信息
+        $access_token = $access['access_token'];
+        $openid = $access['openid'];
+
+        $u = "https://api.weixin.qq.com/sns/userinfo?access_token=".$access_token."&openid=".$openid."&lang=zh_CN";
+        print_r($u);
     }
 }
