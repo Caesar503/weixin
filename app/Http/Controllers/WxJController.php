@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 use GuzzleHttp\Client;
+use GuzzleHttp\Psr7\Uri;
 use Illuminate\Support\Facades\Storage;
 class WxJcontroller extends Controller
 {
@@ -32,8 +33,20 @@ class WxJcontroller extends Controller
     //下载
     public function download()
     {
-        $url = "https://api.weixin.qq.com/cgi-bin/media/get?access_token=".get_wx_access()."&media_id=".$_GET['mid'];
-        $data = file_get_contents($url);
-        file_put_contents('/weixin/',$data);
+//        $url = "https://api.weixin.qq.com/cgi-bin/media/get?access_token=".get_wx_access()."&media_id=".$_GET['mid'];
+//        $data = file_get_contents($url);
+//        file_put_contents('/weixin/',$data);
+        $img = "https://api.weixin.qq.com/cgi-bin/media/get?access_token=".get_wx_access()."&media_id=".$_GET['mid'];
+        $img1 = file_get_contents($img);
+        $client = new Client();
+        $response = $client->get(new Uri($img));
+        //响应头
+        $header = $response->getHeaders();
+        // dd($header);
+        $pp = $header['Content-disposition'][0];
+        $ppp = rtrim(substr($pp,-20),'"');
+        $img_name = 'weixin/'.substr(md5(time().mt_rand()),10,8).'_'.$ppp;
+        // echo $img_name;
+        $rs = Storage::put($img_name,$response->getbody());
     }
 }

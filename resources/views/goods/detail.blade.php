@@ -110,6 +110,7 @@ html, body {
                         console.log(res);
                     }
                 })
+
                 wx.updateAppMessageShareData({
                     title: '现在的iphone4啊', // 分享标题
                     desc: '乱七八糟的飒飒', // 分享描述
