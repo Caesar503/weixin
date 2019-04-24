@@ -6,6 +6,9 @@ use Illuminate\Http\Request;
 
 class WXController extends Controller
 {
+    public function get_vaild(){
+        echo $_GET['echostr'];
+    }
     public function post_vaild()
     {
         //获取传过来的值
