@@ -45,7 +45,7 @@ class WXController extends Controller
 //        dump($data);
         $a_config = $this->test();
 //        print_r($a_config);die;
-        return view("goods.detail",['data'=>$data,'config'=>$a_config]);
+        return view("goods.detail",['data'=>$data,'a_config'=>$a_config]);
     }
     function test()
     {
