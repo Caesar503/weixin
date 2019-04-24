@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
+use GuzzleHttp\Client;
 use Illuminate\Support\Facades\Storage;
 class WxJcontroller extends Controller
 {
