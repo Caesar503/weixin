@@ -24,21 +24,9 @@ class WXController extends Controller
 
         if($res->MsgType=='text'){
             if($res->Content=='最新商品'){
-                echo "<xml>
-                            <ToUserName><![CDATA[$oid]]></ToUserName>
-                            <FromUserName><![CDATA[$gzhid]]></FromUserName>
-                            <CreateTime>".time()."</CreateTime>
-                            <MsgType><![CDATA[text]]></MsgType>
-                            <Content><![CDATA[请稍等，马上查出来！！]]></Content>
-                          </xml>";
+                echo "<xml><ToUserName><![CDATA[$oid]]></ToUserName><FromUserName><![CDATA[$gzhid]]></FromUserName><CreateTime>".time()."</CreateTime><MsgType><![CDATA[text]]></MsgType><Content><![CDATA[请稍等，马上查出来！！]]></Content></xml>";
             }else{
-                    echo "<xml>
-                            <ToUserName><![CDATA[$oid]]></ToUserName>
-                            <FromUserName><![CDATA[$gzhid]]></FromUserName>
-                            <CreateTime>".time()."</CreateTime>
-                            <MsgType><![CDATA[text]]></MsgType>
-                            <Content><![CDATA[暂无有效信息！！]]></Content>
-                          </xml>";
+                echo "<xml><ToUserName><![CDATA[$oid]]></ToUserName><FromUserName><![CDATA[$gzhid]]></FromUserName><CreateTime>".time()."</CreateTime><MsgType><![CDATA[text]]></MsgType><Content><![CDATA[暂无有效信息！！]]></Content></xml>";
             }
         }
     }
