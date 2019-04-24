@@ -71,5 +71,9 @@ class WXController extends Controller
     public function getuser()
     {
       print_r($_GET);
+        //用code 换取 网页access_token
+        $url= "https://api.weixin.qq.com/sns/oauth2/access_token?appid=".env('WX_APPID')."&secret=".env('WX_APPSECRET')."&code=".$_GET['code']."&grant_type=authorization_code";
+        $access = json_decode(file_get_contents($url),true);
+        print_r($access);
     }
 }
