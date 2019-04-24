@@ -68,4 +68,8 @@ class WXController extends Controller
         ];
         return $config;
     }
+    public function getuser()
+    {
+      print_r($_GET);
+    }
 }

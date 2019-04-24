@@ -64,3 +64,16 @@ Route::post('/weixin/vaild','WXController@post_vaild');
 
 //商品详情页面
 Route::get('/weixin/goods_detail/{id?}','WXController@goods_detail');
+
+
+//计划任务（crontab）
+Route::get('/crontab/delorder/','CrontabController@delorder');
+
+
+//网页授权
+Route::get('/weixin/getuser','WXController@getuser');
+
+//code
+Route::get('/code', function () {
+    echo urlEncode($_GET['url']);
+});
