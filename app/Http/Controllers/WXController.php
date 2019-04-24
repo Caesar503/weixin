@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Model\Goods;
+use App\Model\Weixin;
 use Illuminate\Support\Str;
 class WXController extends Controller
 {
@@ -74,14 +75,18 @@ class WXController extends Controller
         //用code 换取 网页access_token
         $url= "https://api.weixin.qq.com/sns/oauth2/access_token?appid=".env('WX_APPID')."&secret=".env('WX_APPSECRET')."&code=".$_GET['code']."&grant_type=authorization_code";
         $access = json_decode(file_get_contents($url),true);
-        print_r($access);
-        echo "<hr>";
 //        通过access_token和openid拉取用户信息
         $access_token = $access['access_token'];
         $openid = $access['openid'];
 
         $u = "https://api.weixin.qq.com/sns/userinfo?access_token=".$access_token."&openid=".$openid."&lang=zh_CN";
         $userinfo = json_decode(file_get_contents($u),true);
-        print_r($userinfo);
+        $res = Weixin::where('openid',$userinfo['openid'])->first();
+        if(!$res){
+            Weixin::insert($userinfo);
+            echo "欢迎登陆<h3>".$userinfo['nickname']."</h3>";
+        }else{
+            echo "欢迎回来<h3>".$res['nickname']."</h3>";
+        }
     }
 }
