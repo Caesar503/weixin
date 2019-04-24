@@ -51,7 +51,7 @@ class WXController extends Controller
     {
         //签名
         $sign = get_sign();
-        $nonceStr = Str::random(9);//随机字符串
+        $nonceStr = Str::random(10);//随机字符串
         $time = time();//当前时间戳
         $url = $_SERVER['REQUEST_SCHEME'].'://'.$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI'];
 //        echo $url;
