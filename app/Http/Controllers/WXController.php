@@ -81,6 +81,7 @@ class WXController extends Controller
         $openid = $access['openid'];
 
         $u = "https://api.weixin.qq.com/sns/userinfo?access_token=".$access_token."&openid=".$openid."&lang=zh_CN";
-        print_r($u);
+        $userinfo = json_decode(file_get_contents($u),true);
+        print_r($userinfo);
     }
 }
