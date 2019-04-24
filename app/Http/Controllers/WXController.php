@@ -83,7 +83,16 @@ class WXController extends Controller
         $userinfo = json_decode(file_get_contents($u),true);
         $res = Weixin::where('openid',$userinfo['openid'])->first();
         if(!$res){
-            Weixin::insert($userinfo);
+            $info = [
+                'openid'=>$userinfo['openid'],
+                'nickname'=>$userinfo['nickname'],
+                'sex'=>$userinfo['sex'],
+                'headimgurl'=>$userinfo['headimgurl'],
+                'city'=>$userinfo['city'],
+                'province'=>$userinfo['province'],
+                'country'=>$userinfo['country']
+            ];
+            Weixin::insert($info);
             echo "欢迎登陆<h3>".$userinfo['nickname']."</h3>";
         }else{
             echo "欢迎回来<h3>".$res['nickname']."</h3>";
