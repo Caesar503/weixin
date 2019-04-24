@@ -55,8 +55,12 @@ Route::get('/weixin/download', 'WxJController@download');
 
 
 
-// 第二次以及以后
-Route::post('/weixin/vaild','WXController@post_vaild');
+
 //第一次
 Route::get('/weixin/vaild','WXController@get_vaild');
 //http://1809zhaokai.comcto.com/weixin/vaild -》》》》原本路由
+// 第二次以及以后
+Route::post('/weixin/vaild','WXController@post_vaild');
+
+//商品详情页面
+Route::get('/weixin/goods_detail/{id?}','WXController@goods_detail');
