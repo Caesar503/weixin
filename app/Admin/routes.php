@@ -13,4 +13,6 @@ Route::group([
     $router->get('/', 'HomeController@index')->name('admin.home');
     //商品管理
     $router->resource('/goods',GoodsController::class);
+    //订单管理
+    $router->resource('/order',OrderController::class);
 });
