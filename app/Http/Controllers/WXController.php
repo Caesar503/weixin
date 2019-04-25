@@ -5,10 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Model\Goods;
 use App\Model\Weixin;
-use GuzzleHttp\Client;
-use GuzzleHttp\Psr7\Uri;
 use Illuminate\Support\Str;
-use App\Model\Wxtext;
 class WXController extends Controller
 {
     public function get_vaild(){
@@ -30,133 +27,13 @@ class WXController extends Controller
         // 公众号id
         $gzhid = $res->ToUserName;
 
-        //判断
-        if($res->MsgType=='event'){
-            if($res->Event=='subscribe'){// echo '关注事件';
-                $local_info = Wxtext::where('openid',$oid)->first();
-                if($local_info){
-                    $dd1 = ['sub_status'=>1];
-                    Wxtext::where('openid',$oid)->update($dd);
-                    echo "<xml><ToUserName><![CDATA[$oid]]></ToUserName><FromUserName><![CDATA[$gzhid]]></FromUserName><CreateTime>".time()."</CreateTime><MsgType><![CDATA[text]]></MsgType><Content><![CDATA[欢迎回来  {$local_user->nickname}]]></Content></xml>";
-                }else{
-                    $l = "https://api.weixin.qq.com/cgi-bin/user/info?access_token=".get_wx_access()."&openid=".$res->FromUserName."&lang=zh_CN";
-                    $data = file_get_contents($l);
-                    $u = json_decode($data,true);
-                    $date = [
-                        'openid'=>$res->FromUserName,
-                        'nickname'=>$u['nickname'],
-                        'sex'=>$u['sex'],
-                        'headimgurl'=>$u['headimgurl']
-                    ];
-                    Wxtext::insert($date);
-                    echo "<xml><ToUserName><![CDATA[$oid]]></ToUserName><FromUserName><![CDATA[$gzhid]]></FromUserName><CreateTime>".time()."</CreateTime><MsgType><![CDATA[text]]></MsgType><Content><![CDATA[欢迎关注{$u['nickname']}]]></Content></xml>";
-                }
-            }else{
-                $dd = ['sub_status'=>0];
-                $ddd = Wxtext::where('openid',$oid)->update($dd);
-                // dd($ddd);
-            }
-        }else if($res->MsgType=='text'){
-            if(strpos($res->Content,'+天气')){
-                $rrr = explode('+',$res->Content)[0];
-                // echo($rrr);die;
-                $tq_u = "https://free-api.heweather.net/s6/weather/now?key=HE1904161048191969&location=".$rrr;
-                $tq_data = json_decode(file_get_contents($tq_u),true);
-                // print_r($tq_data);die;
-                if($tq_data['HeWeather6'][0]['status']=='ok'){
-                    $cond_txt = $tq_data['HeWeather6'][0]['now']['cond_txt']; //天气情况
-                    $tmp = $tq_data['HeWeather6'][0]['now']['tmp']; //摄氏度
-                    $hum = $tq_data['HeWeather6'][0]['now']['hum']; //湿度
-                    $wind_dir = $tq_data['HeWeather6'][0]['now']['wind_dir']; //风向
-                    $wind_sc = $tq_data['HeWeather6'][0]['now']['wind_sc']; //风力
-                    $res_tq_data = '天气情况:'.$cond_txt."\n".'摄氏度:'.$tmp."\n".'湿度:'.$hum."\n".'风向:'.$wind_dir."\n".'风力:'.$wind_sc;
-                    // echo $res_tq_data;die;
-                    echo "<xml>
-                            <ToUserName><![CDATA[$oid]]></ToUserName>
-                            <FromUserName><![CDATA[$gzhid]]></FromUserName>
-                            <CreateTime>".time()."</CreateTime>
-                            <MsgType><![CDATA[text]]></MsgType>
-                            <Content><![CDATA[".$res_tq_data."]]></Content>
-                          </xml>";
-                }else{
-                    echo "<xml>
-                            <ToUserName><![CDATA[$oid]]></ToUserName>
-                            <FromUserName><![CDATA[$gzhid]]></FromUserName>
-                            <CreateTime>".time()."</CreateTime>
-                            <MsgType><![CDATA[text]]></MsgType>
-                            <Content><![CDATA[城市名称不正确！！]]></Content>
-                          </xml>";
-                }
-
-            }else if($res->Content=='最新商品'){
-                        $goodsinfo = Goods::first();
-                        echo "<xml><ToUserName><![CDATA[$oid]]></ToUserName><FromUserName><![CDATA[$gzhid]]></FromUserName><CreateTime>".time()."</CreateTime><MsgType><![CDATA[news]]></MsgType><ArticleCount>1</ArticleCount><Articles><item><Title><![CDATA[".$goodsinfo->goods_name."]]></Title><Description><![CDATA[iphone不好用了，能支持国产了！]]></Description><PicUrl><![CDATA[https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1556079981426&di=741f4c19088db58ea3339840587ba02f&imgtype=0&src=http%3A%2F%2Fwww.quaintfab.com%2FUploads%2Fimage%2F20160112%2F20160112032125_79518.jpg]]></PicUrl><Url><![CDATA[http://1809zhaokai.comcto.com/weixin/goods_detail/".$goodsinfo->id."]]></Url></item></Articles></xml>";
+        if($res->MsgType=='text'){
+            if($res->Content=='最新商品'){
+                $goodsinfo = Goods::first();
+                echo "<xml><ToUserName><![CDATA[$oid]]></ToUserName><FromUserName><![CDATA[$gzhid]]></FromUserName><CreateTime>".time()."</CreateTime><MsgType><![CDATA[news]]></MsgType><ArticleCount>1</ArticleCount><Articles><item><Title><![CDATA[".$goodsinfo->goods_name."]]></Title><Description><![CDATA[iphone不好用了，能支持国产了！]]></Description><PicUrl><![CDATA[https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1556079981426&di=741f4c19088db58ea3339840587ba02f&imgtype=0&src=http%3A%2F%2Fwww.quaintfab.com%2FUploads%2Fimage%2F20160112%2F20160112032125_79518.jpg]]></PicUrl><Url><![CDATA[http://1809zhaokai.comcto.com/weixin/goods_detail/".$goodsinfo->id."]]></Url></item></Articles></xml>";
 //                echo "<xml><ToUserName><![CDATA[$oid]]></ToUserName><FromUserName><![CDATA[$gzhid]]></FromUserName><CreateTime>".time()."</CreateTime><MsgType><![CDATA[text]]></MsgType><Content><![CDATA[请稍等，马上查出来！！]]></Content></xml>";
             }else{
-//                        echo "<xml><ToUserName><![CDATA[$oid]]></ToUserName><FromUserName><![CDATA[$gzhid]]></FromUserName><CreateTime>".time()."</CreateTime><MsgType><![CDATA[text]]></MsgType><Content><![CDATA[暂无有效信息！！]]></Content></xml>";
-//                    }
-//                }
-                $text_data = [
-                    'openid'=>$res->FromUserName,
-                    'gzhid'=>$res->ToUserName,
-                    'msgid'=>$res->MsgId,
-                    'text'=>$res->Content,
-                    'create_t'=>$res->CreateTime
-                ];
-                WxText::insert($text_data);
-                echo "<xml>
-                            <ToUserName><![CDATA[$oid]]></ToUserName>
-                            <FromUserName><![CDATA[$gzhid]]></FromUserName>
-                            <CreateTime>".time()."</CreateTime>
-                            <MsgType><![CDATA[text]]></MsgType>
-                            <Content><![CDATA[我们已收到您的消息,亲,稍等]]></Content>
-                          </xml>";
-            }
-        }else if($res->MsgType=='voice'){
-            $url ="https://api.weixin.qq.com/cgi-bin/media/get?access_token=".get_wx_access()."&media_id=".$res->MediaId;
-            $url1 = file_get_contents($url);
-            $file_name = time().mt_rand(11111,99999).'.amr';
-            $re = file_put_contents('wx/voice/'.$file_name,$url1);
-            $voice_data = [
-                'openid'=>$res->FromUserName,
-                'gzhid'=>$res->ToUserName,
-                'msgid'=>$res->MsgId,
-                'mediaid'=>$res->MediaId,
-                'url'=>'wx/voice/'.$file_name,
-            ];
-            Wxtext::insert($voice_data);
-            echo "<xml>
-                            <ToUserName><![CDATA[$oid]]></ToUserName>
-                            <FromUserName><![CDATA[$gzhid]]></FromUserName>
-                            <CreateTime>".time()."</CreateTime>
-                            <MsgType><![CDATA[text]]></MsgType>
-                            <Content><![CDATA[我们已收到您的语音消息,亲,稍等]]></Content>
-                          </xml>";
-        }else if($res->MsgType=='image'){
-            $img = "https://api.weixin.qq.com/cgi-bin/media/get?access_token=".get_wx_access()."&media_id=".$res->MediaId;
-            $img1 = file_get_contents($img);
-            $client = new Client();
-            $response = $client->get(new Uri($img));
-            //响应头
-            $header = $response->getHeaders();
-            // dd($header);
-            $pp = $header['Content-disposition'][0];
-            $ppp = rtrim(substr($pp,-20),'"');
-            $img_name = 'weixin/'.substr(md5(time().mt_rand()),10,8).'_'.$ppp;
-            // echo $img_name;
-            $image_data = [
-                'openid'=>$res->FromUserName,
-                'gzhid'=>$res->ToUserName,
-                'msgid'=>$res->MsgId,
-                'mediaid'=>$res->MediaId,
-                'url'=>$img_name,
-            ];
-            Wxtext::insert($image_data);
-            $rs = Storage::put($img_name,$response->getbody());
-            if($rs){
-                echo "<xml><ToUserName><![CDATA[$oid]]></ToUserName><FromUserName><![CDATA[$gzhid]]></FromUserName><CreateTime>".time()."</CreateTime><MsgType><![CDATA[text]]></MsgType><Content><![CDATA[保存ok！]]></Content></xml>";
-            }else{
-                echo "<xml><ToUserName><![CDATA[$oid]]></ToUserName><FromUserName><![CDATA[$gzhid]]></FromUserName><CreateTime>".time()."</CreateTime><MsgType><![CDATA[text]]></MsgType><Content><![CDATA[保存失败！]]></Content></xml>";
+                echo "<xml><ToUserName><![CDATA[$oid]]></ToUserName><FromUserName><![CDATA[$gzhid]]></FromUserName><CreateTime>".time()."</CreateTime><MsgType><![CDATA[text]]></MsgType><Content><![CDATA[暂无有效信息！！]]></Content></xml>";
             }
         }
     }
