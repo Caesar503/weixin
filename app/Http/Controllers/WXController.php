@@ -81,6 +81,7 @@ class WXController extends Controller
 
         $u = "https://api.weixin.qq.com/sns/userinfo?access_token=".$access_token."&openid=".$openid."&lang=zh_CN";
         $userinfo = json_decode(file_get_contents($u),true);
+//        检测该用户存在不存在
         $res = Weixin::where('openid',$userinfo['openid'])->first();
         if(!$res){
             $info = [
