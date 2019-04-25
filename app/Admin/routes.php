@@ -11,5 +11,6 @@ Route::group([
 ], function (Router $router) {
 
     $router->get('/', 'HomeController@index')->name('admin.home');
-
+    //商品管理
+    $router->resource('/goods',GoodsController::class);
 });
