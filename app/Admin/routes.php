@@ -15,4 +15,6 @@ Route::group([
     $router->resource('/goods',GoodsController::class);
     //订单管理
     $router->resource('/order',OrderController::class);
+    //用户管理
+    $router->resource('/weixin',WxController::class);
 });
