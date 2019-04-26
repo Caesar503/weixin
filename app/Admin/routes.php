@@ -17,8 +17,11 @@ Route::group([
     $router->resource('/order',OrderController::class);
     //用户管理
     $router->resource('/weixin',WxController::class);
-    //素材管理
-    $router->resource('/suclist',ScController::class);
     //新增素材
     $router->get('/addsuc', 'ObController@add');
+    $router->post('/adddo', 'ObController@adddo');
+
+    //群发
+    $router->get('/moresend', 'ObController@more_send');
+
 });

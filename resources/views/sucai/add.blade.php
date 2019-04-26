@@ -5,15 +5,10 @@
     <title>添加临时素材</title>
 </head>
 <body>
-
-
-<button id="btu">选择图片</button>
-<img src="" alt="" id="img0">
-<hr>
-<img src="" alt="" id="img1">
-<hr><img src="" alt="" id="img2">
-<script src="/js/jquery-1.12.4.min.js"></script>
-<script src="http://res.wx.qq.com/open/js/jweixin-1.4.0.js"></script>
+<form action="/admin/adddo" method="post" enctype="multipart/form-data">
+    <input type="file" name="sss">
+    <input type="submit" value="提交">
+</form>
 
 </body>
 </html>
