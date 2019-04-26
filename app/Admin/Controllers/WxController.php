@@ -85,7 +85,7 @@ class WxController extends Controller
         $grid->openid('用户ID');
         $grid->nickname('昵称');
         $grid->sex('性别');
-        $grid->headimgurl('头像');
+        $grid->headimgurl('头像')->image();
         $grid->city('城市');
         $grid->province('省级');
         $grid->country('国籍');
