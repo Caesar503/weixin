@@ -99,7 +99,7 @@ html, body {
             timestamp:"{{$a_config['timestamp']}}", // 必填，生成签名的时间戳
             nonceStr: "{{$a_config['nonceStr']}}", // 必填，生成签名的随机串
             signature: "{{$a_config['signature']}}",// 必填，签名
-            jsApiList: ['onMenuShareTimeline','updateAppMessageShareData'] // 必填，需要使用的JS接口列表
+            jsApiList: ['updateAppMessageShareData','updateTimelineShareData'] // 必填，需要使用的JS接口列表
         });
         wx.ready(function(){
                 {{--wx.onMenuShareTimeline({--}}
@@ -118,6 +118,14 @@ html, body {
                     imgUrl: 'https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1556079981426&di=741f4c19088db58ea3339840587ba02f&imgtype=0&src=http%3A%2F%2Fwww.quaintfab.com%2FUploads%2Fimage%2F20160112%2F20160112032125_79518.jpg', // 分享图标
                     success: function (res) {
                        console.log(res);
+                    }
+                })
+                wx.updateTimelineShareData({
+                    title: 'hhhhahhaha', // 分享标题
+                    link: '{{$a_config['url']}}', // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
+                    imgUrl: 'https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1556079981426&di=741f4c19088db58ea3339840587ba02f&imgtype=0&src=http%3A%2F%2Fwww.quaintfab.com%2FUploads%2Fimage%2F20160112%2F20160112032125_79518.jpg', // 分享图标
+                    success: function () {
+                        // 设置成功
                     }
                 })
                 {{--wx.updateAppMessageShareData({--}}
