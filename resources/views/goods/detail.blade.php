@@ -111,7 +111,6 @@ html, body {
                     {{--}--}}
                 {{--})--}}
 //            分享给朋友”及“分享到QQ
-            wx.ready(function () {   //需在用户可能点击分享按钮前就先调用
                 wx.updateAppMessageShareData({
                     title: 'hahaha', // 分享标题
                     desc: '阿巴斯的hi爱搜', // 分享描述
@@ -121,7 +120,6 @@ html, body {
                        console.log(res);
                     }
                 })
-            });
                 {{--wx.updateAppMessageShareData({--}}
                     {{--title: '现在的iphone4啊', // 分享标题--}}
                     {{--desc: '乱七八糟的飒飒', // 分享描述--}}
