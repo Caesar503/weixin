@@ -40,19 +40,58 @@ class WXController extends Controller
             }
         }
         if($res->MsgType=='event'){
-            if($res->Event=='SCAN'){
-                //填入数据库
-                $tmp = [
-                    'openid'=>$oid,
-                    'openid_type'=>$res->EventKey,
-                    'ticket'=>$res->Ticket
-                ];
-                Tmp::insert($tmp);
-                //返回图文消息
+            //判断eventkey 存在不存在
+            if(isset($res->EventKey)){
                 $goodsinfo = Goods::first();
-                echo "<xml><ToUserName><![CDATA[$oid]]></ToUserName><FromUserName><![CDATA[$gzhid]]></FromUserName><CreateTime>".time()."</CreateTime><MsgType><![CDATA[news]]></MsgType><ArticleCount>1</ArticleCount><Articles><item><Title><![CDATA[".$goodsinfo->goods_name."]]></Title><Description><![CDATA[iphone不好用了，能支持国产了！]]></Description><PicUrl><![CDATA[https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1556079981426&di=741f4c19088db58ea3339840587ba02f&imgtype=0&src=http%3A%2F%2Fwww.quaintfab.com%2FUploads%2Fimage%2F20160112%2F20160112032125_79518.jpg]]></PicUrl><Url><![CDATA[http://1809zhaokai.comcto.com/weixin/goods_detail/".$goodsinfo->id."]]></Url></item></Articles></xml>";
-            }else{
-                echo "<xml><ToUserName><![CDATA[$oid]]></ToUserName><FromUserName><![CDATA[$gzhid]]></FromUserName><CreateTime>".time()."</CreateTime><MsgType><![CDATA[text]]></MsgType><Content><![CDATA[暂无有效信息！！]]></Content></xml>";
+                if($res->Event=='SCAN'){
+                    //填入数据库
+                    $uin = $this->get_user($oid);
+//                    dd($uin);
+                    $tmp = [
+                        'openid'=>$oid,
+                        'openid_type'=>$res->EventKey,
+                        'ticket'=>$res->Ticket,
+                        'nickname'=>$uin['nickname'],
+                        'sex'=>$uin['sex'],
+                        'city'=>$uin['city']
+                    ];
+                    Tmp::insert($tmp);
+                    //返回图文消息
+                    echo "<xml><ToUserName><![CDATA[$oid]]></ToUserName><FromUserName><![CDATA[$gzhid]]></FromUserName><CreateTime>".time()."</CreateTime><MsgType><![CDATA[news]]></MsgType><ArticleCount>1</ArticleCount><Articles><item><Title><![CDATA[".$goodsinfo->goods_name."]]></Title><Description><![CDATA[iphone不好用了，能支持国产了！]]></Description><PicUrl><![CDATA[https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1556079981426&di=741f4c19088db58ea3339840587ba02f&imgtype=0&src=http%3A%2F%2Fwww.quaintfab.com%2FUploads%2Fimage%2F20160112%2F20160112032125_79518.jpg]]></PicUrl><Url><![CDATA[http://1809zhaokai.comcto.com/weixin/goods_detail/".$goodsinfo->id."]]></Url></item></Articles></xml>";
+                }else{
+                    $uin = $this->get_user($oid);
+//                    dd($uin);
+                    $key = explode('_',$res->EventKey);
+                    $tmp = [
+                        'openid'=>$oid,
+                        'openid_type'=>$key[1],
+                        'ticket'=>$res->Ticket,
+                        'nickname'=>$uin['nickname'],
+                        'sex'=>$uin['sex'],
+                        'city'=>$uin['city']
+                    ];
+                    Tmp::insert($tmp);
+                    echo "<xml><ToUserName><![CDATA[$oid]]></ToUserName><FromUserName><![CDATA[$gzhid]]></FromUserName><CreateTime>".time()."</CreateTime><MsgType><![CDATA[news]]></MsgType><ArticleCount>1</ArticleCount><Articles><item><Title><![CDATA[".$goodsinfo->goods_name."]]></Title><Description><![CDATA[iphone不好用了，能支持国产了！]]></Description><PicUrl><![CDATA[https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1556079981426&di=741f4c19088db58ea3339840587ba02f&imgtype=0&src=http%3A%2F%2Fwww.quaintfab.com%2FUploads%2Fimage%2F20160112%2F20160112032125_79518.jpg]]></PicUrl><Url><![CDATA[http://1809zhaokai.comcto.com/weixin/goods_detail/".$goodsinfo->id."]]></Url></item></Articles></xml>";
+                }
+            }else if($res->Event=='subscribe'){
+                //查询用户存在不存在
+                $u = Weixin::where('openid',$oid)->first();
+                if($u){
+                    echo "<xml><ToUserName><![CDATA[$oid]]></ToUserName><FromUserName><![CDATA[$gzhid]]></FromUserName><CreateTime>".time()."</CreateTime><MsgType><![CDATA[text]]></MsgType><Content><![CDATA[欢迎回来！！".$u->nickname."]]></Content></xml>";
+                }else{
+                    $uinfo = $this->get_user($oid);
+                    $da = [
+                        'openid'=>$oid,
+                        'nickname'=>$uinfo['nickname'],
+                        'sex'=>$uinfo['sex'],
+                        'headimgurl'=>$uinfo['headimgurl'],
+                        'city'=>$uinfo['city'],
+                        'province'=>$uinfo['province'],
+                        'country'=>$uinfo['country']
+                    ];
+                    Weixin::insert($da);
+                    echo "<xml><ToUserName><![CDATA[$oid]]></ToUserName><FromUserName><![CDATA[$gzhid]]></FromUserName><CreateTime>".time()."</CreateTime><MsgType><![CDATA[text]]></MsgType><Content><![CDATA[欢迎关注！！]]></Content></xml>";
+                }
             }
         }
     }
@@ -146,5 +185,12 @@ class WXController extends Controller
         echo $url2;
         $arr = file_get_contents($url2);
 //        dd($arr);
+    }
+    //获取用户信息
+    function get_user($openid)
+    {
+        $url = 'https://api.weixin.qq.com/cgi-bin/user/info?access_token='.get_wx_access().'&openid='.$openid.'&lang=zh_CN';
+        $userinfo = json_decode(file_get_contents($url),true);
+        return $userinfo;
     }
 }
