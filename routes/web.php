@@ -82,3 +82,9 @@ Route::get('/code', function () {
 
 //二维码
 Route::get('/weixin/code','WXController@code');
+
+
+
+
+//周日任务
+Route::get('/weixin/display','WXController@display');

@@ -110,7 +110,7 @@ class WXController extends Controller
     {
         //签名
         $sign = get_sign();
-        $nonceStr = Str::random(10);//随机字符串
+        $nonceStr = Str::random(9);//随机字符串
         $time = time();//当前时间戳
         $url = $_SERVER['REQUEST_SCHEME'].'://'.$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI'];
 //        echo $url;
@@ -192,5 +192,18 @@ class WXController extends Controller
         $url = 'https://api.weixin.qq.com/cgi-bin/user/info?access_token='.get_wx_access().'&openid='.$openid.'&lang=zh_CN';
         $userinfo = json_decode(file_get_contents($url),true);
         return $userinfo;
+    }
+
+
+
+
+    //周日任务
+    public function display()
+    {
+//        dd($_SERVER);
+        $url = $_SERVER['REQUEST_SCHEME'].'://'.$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI'];
+//        echo $url;
+        $data = Goods::first()->toArray();
+        return view('weixin/aaa',['url'=>$url,'data'=>$data]);
     }
 }
