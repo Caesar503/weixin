@@ -87,4 +87,4 @@ Route::get('/weixin/code','WXController@code');
 
 
 //周日任务
-Route::get('/weixin/display','WXController@display');
+Route::get('/weixin/display/{id?}','WXController@display');

@@ -198,12 +198,15 @@ class WXController extends Controller
 
 
     //周日任务
-    public function display()
+    public function display($id=0)
     {
+        if(!$id){
+            die('暂无商品信息');
+        }
 //        dd($_SERVER);
         $url = $_SERVER['REQUEST_SCHEME'].'://'.$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI'];
 //        echo $url;
-        $data = Goods::first()->toArray();
+        $data = Goods::where('id',$id)->first()->toArray();
         return view('weixin/aaa',['url'=>$url,'data'=>$data]);
     }
 }
