@@ -115,7 +115,10 @@ class ObController extends Controller
         $respon = $client->request('POST',$url,[
             'body'=>$json_data
         ]);
-        if($respon){
+//        dd($respon);
+        $res = json_decode($respon->getBody(),true);
+//        dd($res);
+        if($res['errcode']=='0'){
             echo 1;
         }else{
             echo 2;
