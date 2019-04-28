@@ -73,7 +73,12 @@ Route::get('/crontab/delorder/','CrontabController@delorder');
 //网页授权
 Route::get('/weixin/getuser','WXController@getuser');
 
+
 //code
 Route::get('/code', function () {
     echo urlEncode($_GET['url']);
 });
+
+
+//二维码
+Route::get('/weixin/code','WXController@code');

@@ -6,6 +6,10 @@ use Illuminate\Http\Request;
 use App\Model\Goods;
 use App\Model\Weixin;
 use Illuminate\Support\Str;
+use GuzzleHttp\Client;
+use GuzzleHttp\Psr7\Uri;
+use Monolog\Handler\Curl;
+use App\Model\Tmp;
 class WXController extends Controller
 {
     public function get_vaild(){
@@ -29,6 +33,22 @@ class WXController extends Controller
 
         if($res->MsgType=='text'){
             if($res->Content=='最新商品'){
+                $goodsinfo = Goods::first();
+                echo "<xml><ToUserName><![CDATA[$oid]]></ToUserName><FromUserName><![CDATA[$gzhid]]></FromUserName><CreateTime>".time()."</CreateTime><MsgType><![CDATA[news]]></MsgType><ArticleCount>1</ArticleCount><Articles><item><Title><![CDATA[".$goodsinfo->goods_name."]]></Title><Description><![CDATA[iphone不好用了，能支持国产了！]]></Description><PicUrl><![CDATA[https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1556079981426&di=741f4c19088db58ea3339840587ba02f&imgtype=0&src=http%3A%2F%2Fwww.quaintfab.com%2FUploads%2Fimage%2F20160112%2F20160112032125_79518.jpg]]></PicUrl><Url><![CDATA[http://1809zhaokai.comcto.com/weixin/goods_detail/".$goodsinfo->id."]]></Url></item></Articles></xml>";
+            }else{
+                echo "<xml><ToUserName><![CDATA[$oid]]></ToUserName><FromUserName><![CDATA[$gzhid]]></FromUserName><CreateTime>".time()."</CreateTime><MsgType><![CDATA[text]]></MsgType><Content><![CDATA[暂无有效信息！！]]></Content></xml>";
+            }
+        }
+        if($res->MsgType=='event'){
+            if($res->Event=='SCAN'){
+                //填入数据库
+                $tmp = [
+                    'openid'=>$oid,
+                    'openid_type'=>$res->EventKey,
+                    'ticket'=>$res->Ticket
+                ];
+                Tmp::insert($tmp);
+                //返回图文消息
                 $goodsinfo = Goods::first();
                 echo "<xml><ToUserName><![CDATA[$oid]]></ToUserName><FromUserName><![CDATA[$gzhid]]></FromUserName><CreateTime>".time()."</CreateTime><MsgType><![CDATA[news]]></MsgType><ArticleCount>1</ArticleCount><Articles><item><Title><![CDATA[".$goodsinfo->goods_name."]]></Title><Description><![CDATA[iphone不好用了，能支持国产了！]]></Description><PicUrl><![CDATA[https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1556079981426&di=741f4c19088db58ea3339840587ba02f&imgtype=0&src=http%3A%2F%2Fwww.quaintfab.com%2FUploads%2Fimage%2F20160112%2F20160112032125_79518.jpg]]></PicUrl><Url><![CDATA[http://1809zhaokai.comcto.com/weixin/goods_detail/".$goodsinfo->id."]]></Url></item></Articles></xml>";
             }else{
@@ -97,5 +117,34 @@ class WXController extends Controller
         }else{
             echo "欢迎回来<h3>".$res['nickname']."</h3>";
         }
+    }
+    public function code()
+    {
+        //获取ticket
+        $url = 'https://api.weixin.qq.com/cgi-bin/qrcode/create?access_token='.get_wx_access();
+//        echo $url;
+        $data = [
+            'action_name'=>'QR_LIMIT_SCENE',
+            'action_info'=>[
+                'scene'=>[
+                    'scene_id'=>1
+                ]
+            ]
+        ];
+        $json_data = json_encode($data);
+//        echo $json_data;
+        $client = new Client();
+        $respon = $client->request('POST',$url,[
+            'body'=>$json_data
+        ]);
+        $arr = json_decode($respon->getBody(),true);
+//        dd($arr);
+        $ticket = UrlEncode($arr['ticket']);
+//        echo $ticket;
+        //通过ticket获取二维码
+        $url2 = "https://mp.weixin.qq.com/cgi-bin/showqrcode?ticket=".$ticket;
+        echo $url2;
+        $arr = file_get_contents($url2);
+//        dd($arr);
     }
 }
