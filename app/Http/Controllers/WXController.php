@@ -332,7 +332,7 @@ class WXController extends Controller
         echo "<h2>签到成功</h2>";
 
         //获取签到记录
-        $r_data = Redis::lrange(0,-1);
+        $r_data = Redis::lrange($k,0,-1);
         echo "<pre>";print_r($r_data);echo "</pre>";
     }
 }
