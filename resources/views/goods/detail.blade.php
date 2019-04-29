@@ -84,7 +84,7 @@ html, body {
 
     </div>
     <ul>
-        <li>商品图：<img src="https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1556079981426&di=741f4c19088db58ea3339840587ba02f&imgtype=0&src=http%3A%2F%2Fwww.quaintfab.com%2FUploads%2Fimage%2F20160112%2F20160112032125_79518.jpg"></li>
+        <li>商品图：<img src="{{$data['img']}}"></li>
         <li>商品名称 ：{{$data['goods_name']}}</li>
         <li>商品单价 ： {{$data['goods_price']}}</li>
     </ul>
