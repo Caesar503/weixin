@@ -231,6 +231,12 @@ class WXController extends Controller
                         "key"=>"key_009",
                         "url"=>$_SERVER['REQUEST_SCHEME'].'://'."1809zhaokai.comcto.com"."/weixin/ggg",
                     ],
+                    [
+                        "type"=>"view",
+                        "name"=>"点击签到",
+                        "key"=>"key_005",
+                        "url"=>$_SERVER['REQUEST_SCHEME'].'://'."1809zhaokai.comcto.com"."/weixin/qq",
+                    ],
             ]
         ];
         $json_data = json_encode($data,JSON_UNESCAPED_UNICODE);
@@ -280,5 +286,10 @@ class WXController extends Controller
             echo "欢迎回来<h3>".$res['nickname']."</h3>";
         }
     }
-
+    public function qq()
+    {
+//        echo urlencode("http://1809zhaokai.comcto.com/weixin/qq");http%3A%2F%2F1809zhaokai.comcto.com%2Fweixin%2Fqq
+        $url = "https://open.weixin.qq.com/connect/oauth2/authorize?appid=wx9beeb571b5118194&redirect_uri=http%3A%2F%2F1809zhaokai.comcto.com%2Fweixin%2Fqq&response_type=code&scope=snsapi_userinfo&state=STATE#wechat_redirect";
+        header("Refresh:0;url=".$url);
+    }
 }

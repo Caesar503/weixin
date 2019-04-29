@@ -95,7 +95,10 @@ Route::get('/weixin/display/{id?}','WXController@display');
 //创建菜单
 Route::get('/create','WXController@create_m');
 
-
+//跳转授权
 Route::get('/weixin/ggg','WXController@ggg');
-
+//欢迎登录
 Route::get('/weixin/huanying','WXController@huanying');
+
+//签到
+Route::get('/weixin/qq','WXController@qq');

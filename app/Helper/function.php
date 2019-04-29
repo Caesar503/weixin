@@ -4,22 +4,21 @@ use Illuminate\Support\Facades\Redis;
     function get_wx_access()
     {
         $key = 'a_toke';
-//        $access_token = Redis::get($key);
-////        echo $access_token;die;
-//        if($access_token){
-//            return $access_token;
-//        }else{
+        $access_token = Redis::get($key);
+//        echo $access_token;die;
+        if($access_token){
+            return $access_token;
+        }else{
             $url = "https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential&appid=".env('WX_APPID')."&secret=".env('WX_APPSECRET');
             $data = json_decode(file_get_contents($url),true);
             if(isset($data['access_token'])){
                 Redis::set($key,$data['access_token']);
                 Redis::expire($key,3600);
                 return $data['access_token'];
+            }else{
+                return false;
             }
-//            else{
-//                return false;
-//            }
-//        }
+        }
     }
     //获取签名
     function get_sign()
