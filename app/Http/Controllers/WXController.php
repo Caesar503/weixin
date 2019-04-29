@@ -252,7 +252,7 @@ class WXController extends Controller
 //        换取网页授权
         $url = "https://api.weixin.qq.com/sns/oauth2/access_token?appid=".env('WX_APPID')."&secret=".env('WX_APPSECRET')."&code=".$_GET['code']."&grant_type=authorization_code";
         $data = json_decode(file_get_contents($url),true);
-        dd($data);
+//        dd($data);
 //        获取网页access_token和用户的openid
         $access_token = $data['access_token'];
         $openid = $data['openid'];
