@@ -86,7 +86,7 @@ class GoodsController extends Controller
         $grid->goods_price('商品单价');
         $grid->num('库存');
         $grid->is_status('商品状态');
-
+        $grid->img('商品图片')->image();
         return $grid;
     }
 
@@ -122,7 +122,7 @@ class GoodsController extends Controller
         $form->number('goods_price', 'Goods price');
         $form->number('num', 'Num');
         $form->switch('is_status', 'Is status')->default(1);
-
+        $form->image('img','Img');
         return $form;
     }
 }
