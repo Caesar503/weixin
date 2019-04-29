@@ -32,11 +32,20 @@ class WXController extends Controller
         $gzhid = $res->ToUserName;
 
         if($res->MsgType=='text'){
+
             if($res->Content=='最新商品'){
                 $goodsinfo = Goods::first();
                 echo "<xml><ToUserName><![CDATA[$oid]]></ToUserName><FromUserName><![CDATA[$gzhid]]></FromUserName><CreateTime>".time()."</CreateTime><MsgType><![CDATA[news]]></MsgType><ArticleCount>1</ArticleCount><Articles><item><Title><![CDATA[".$goodsinfo->goods_name."]]></Title><Description><![CDATA[iphone不好用了，能支持国产了！]]></Description><PicUrl><![CDATA[https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1556079981426&di=741f4c19088db58ea3339840587ba02f&imgtype=0&src=http%3A%2F%2Fwww.quaintfab.com%2FUploads%2Fimage%2F20160112%2F20160112032125_79518.jpg]]></PicUrl><Url><![CDATA[http://1809zhaokai.comcto.com/weixin/goods_detail/".$goodsinfo->id."]]></Url></item></Articles></xml>";
             }else{
-                echo "<xml><ToUserName><![CDATA[$oid]]></ToUserName><FromUserName><![CDATA[$gzhid]]></FromUserName><CreateTime>".time()."</CreateTime><MsgType><![CDATA[text]]></MsgType><Content><![CDATA[暂无有效信息！！]]></Content></xml>";
+                $g_info = Goods::where('goods_name',$res->Content)->first();
+                $r_info = Goods::where('id',rand(1,5))->first()->toArray();
+//                dd($r_info);
+                if($g_info){
+                    echo "<xml><ToUserName><![CDATA[$oid]]></ToUserName><FromUserName><![CDATA[$gzhid]]></FromUserName><CreateTime>".time()."</CreateTime><MsgType><![CDATA[news]]></MsgType><ArticleCount>1</ArticleCount><Articles><item><Title><![CDATA[".$g_info->goods_name."]]></Title><Description><![CDATA[小呀嘛小二郎，巧指".$g_info->goods_name."]]></Description><PicUrl><![CDATA[".$g_info->img."]]></PicUrl><Url><![CDATA[http://1809zhaokai.comcto.com/weixin/goods_detail/".$g_info->id."]]></Url></item></Articles></xml>";
+                }else{
+                    echo "<xml><ToUserName><![CDATA[$oid]]></ToUserName><FromUserName><![CDATA[$gzhid]]></FromUserName><CreateTime>".time()."</CreateTime><MsgType><![CDATA[news]]></MsgType><ArticleCount>1</ArticleCount><Articles><item><Title><![CDATA[".$r_info['goods_name']."]]></Title><Description><![CDATA[小呀嘛小二郎，巧指".$r_info['goods_name']."]]></Description><PicUrl><![CDATA[".$r_info['img']."]]></PicUrl><Url><![CDATA[http://1809zhaokai.comcto.com/weixin/goods_detail/".$r_info['id']."]]></Url></item></Articles></xml>";
+                }
+
             }
         }
         if($res->MsgType=='event'){
