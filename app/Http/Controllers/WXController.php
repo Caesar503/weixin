@@ -10,6 +10,7 @@ use GuzzleHttp\Client;
 use GuzzleHttp\Psr7\Uri;
 use Monolog\Handler\Curl;
 use App\Model\Tmp;
+use Illuminate\Support\Facades\Redis;
 class WXController extends Controller
 {
     public function get_vaild(){
@@ -288,8 +289,50 @@ class WXController extends Controller
     }
     public function qq()
     {
-//        echo urlencode("http://1809zhaokai.comcto.com/weixin/qq");http%3A%2F%2F1809zhaokai.comcto.com%2Fweixin%2Fqq
-        $url = "https://open.weixin.qq.com/connect/oauth2/authorize?appid=wx9beeb571b5118194&redirect_uri=http%3A%2F%2F1809zhaokai.comcto.com%2Fweixin%2Fqq&response_type=code&scope=snsapi_userinfo&state=STATE#wechat_redirect";
+//        echo urlencode("http://1809zhaokai.comcto.com/weixin/qiandao");
+////        http%3A%2F%2F1809zhaokai.comcto.com%2Fweixin%2Fqq
+        $url = "https://open.weixin.qq.com/connect/oauth2/authorize?appid=wx9beeb571b5118194&redirect_uri=http%3A%2F%2F1809zhaokai.comcto.com%2Fweixin%2Fqiandao&response_type=code&scope=snsapi_userinfo&state=STATE#wechat_redirect";
         header("Refresh:0;url=".$url);
+    }
+    public function qiandao()
+    {
+        print_r($_GET);
+//        换取网页授权
+        $url = "https://api.weixin.qq.com/sns/oauth2/access_token?appid=".env('WX_APPID')."&secret=".env('WX_APPSECRET')."&code=".$_GET['code']."&grant_type=authorization_code";
+        $data = json_decode(file_get_contents($url),true);
+//        dd($data);
+//        获取网页access_token和用户的openid
+        $access_token = $data['access_token'];
+        $openid = $data['openid'];
+        //拉去用户的信息
+        $url1 = "https://api.weixin.qq.com/sns/userinfo?access_token=".get_wx_access()."&openid=".$openid."&lang=zh_CN";
+        $userinfo = json_decode(file_get_contents($url1),true);
+        $res = Weixin::where('openid',$openid)->first();
+        if(!$res){
+            $info = [
+                'openid'=>$userinfo['openid'],
+                'nickname'=>$userinfo['nickname'],
+                'sex'=>$userinfo['sex'],
+                'headimgurl'=>$userinfo['headimgurl'],
+                'city'=>$userinfo['city'],
+                'province'=>$userinfo['province'],
+                'country'=>$userinfo['country']
+            ];
+            Weixin::insert($info);
+            //存储redis
+            $k = 'a_dao';
+            Redis::lpush($k,$userinfo['nickname'].date('Y-m-d H:i:s',time()));
+            echo "欢迎登陆<h3>".$userinfo['nickname']."</h3>";
+        }else{
+            //存储redis
+            $k = 'a_dao';
+            Redis::lpush($k,$res['nickname'].date('Y-m-d H:i:s',time()));
+            echo "欢迎回来<h3>".$res['nickname']."</h3>";
+        }
+        echo "<h2>签到成功</h2>";
+
+        //获取签到记录
+        $r_data = Redis::lrange(0,-1);
+        echo "<pre>";print_r($r_data);echo "</pre>";
     }
 }
