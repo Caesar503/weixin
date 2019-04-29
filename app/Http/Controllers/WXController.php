@@ -50,38 +50,38 @@ class WXController extends Controller
         }
         if($res->MsgType=='event'){
             //判断eventkey 存在不存在
-            if(isset($res->EventKey)){
-                $goodsinfo = Goods::first();
-                if($res->Event=='SCAN'){
-                    //填入数据库
-                    $uin = $this->get_user($oid);
-//                    dd($uin);
-                    $tmp = [
-                        'openid'=>$oid,
-                        'openid_type'=>$res->EventKey,
-                        'ticket'=>$res->Ticket,
-                        'nickname'=>$uin['nickname'],
-                        'sex'=>$uin['sex'],
-                        'city'=>$uin['city']
-                    ];
-                    Tmp::insert($tmp);
-                    //返回图文消息
-                    echo "<xml><ToUserName><![CDATA[$oid]]></ToUserName><FromUserName><![CDATA[$gzhid]]></FromUserName><CreateTime>".time()."</CreateTime><MsgType><![CDATA[news]]></MsgType><ArticleCount>1</ArticleCount><Articles><item><Title><![CDATA[".$goodsinfo->goods_name."]]></Title><Description><![CDATA[iphone不好用了，能支持国产了！]]></Description><PicUrl><![CDATA[https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1556079981426&di=741f4c19088db58ea3339840587ba02f&imgtype=0&src=http%3A%2F%2Fwww.quaintfab.com%2FUploads%2Fimage%2F20160112%2F20160112032125_79518.jpg]]></PicUrl><Url><![CDATA[http://1809zhaokai.comcto.com/weixin/goods_detail/".$goodsinfo->id."]]></Url></item></Articles></xml>";
-                }else{
-                    $uin = $this->get_user($oid);
-//                    dd($uin);
-                    $key = explode('_',$res->EventKey);
-                    $tmp = [
-                        'openid'=>$oid,
-                        'openid_type'=>$key[1],
-                        'ticket'=>$res->Ticket,
-                        'nickname'=>$uin['nickname'],
-                        'sex'=>$uin['sex'],
-                        'city'=>$uin['city']
-                    ];
-                    Tmp::insert($tmp);
-                    echo "<xml><ToUserName><![CDATA[$oid]]></ToUserName><FromUserName><![CDATA[$gzhid]]></FromUserName><CreateTime>".time()."</CreateTime><MsgType><![CDATA[news]]></MsgType><ArticleCount>1</ArticleCount><Articles><item><Title><![CDATA[".$goodsinfo->goods_name."]]></Title><Description><![CDATA[iphone不好用了，能支持国产了！]]></Description><PicUrl><![CDATA[https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1556079981426&di=741f4c19088db58ea3339840587ba02f&imgtype=0&src=http%3A%2F%2Fwww.quaintfab.com%2FUploads%2Fimage%2F20160112%2F20160112032125_79518.jpg]]></PicUrl><Url><![CDATA[http://1809zhaokai.comcto.com/weixin/goods_detail/".$goodsinfo->id."]]></Url></item></Articles></xml>";
-                }
+//            if(isset($res->EventKey)){
+//                $goodsinfo = Goods::first();
+//                if($res->Event=='SCAN'){
+//                    //填入数据库
+//                    $uin = $this->get_user($oid);
+////                    dd($uin);
+//                    $tmp = [
+//                        'openid'=>$oid,
+//                        'openid_type'=>$res->EventKey,
+//                        'ticket'=>$res->Ticket,
+//                        'nickname'=>$uin['nickname'],
+//                        'sex'=>$uin['sex'],
+//                        'city'=>$uin['city']
+//                    ];
+//                    Tmp::insert($tmp);
+//                    //返回图文消息
+//                    echo "<xml><ToUserName><![CDATA[$oid]]></ToUserName><FromUserName><![CDATA[$gzhid]]></FromUserName><CreateTime>".time()."</CreateTime><MsgType><![CDATA[news]]></MsgType><ArticleCount>1</ArticleCount><Articles><item><Title><![CDATA[".$goodsinfo->goods_name."]]></Title><Description><![CDATA[iphone不好用了，能支持国产了！]]></Description><PicUrl><![CDATA[https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1556079981426&di=741f4c19088db58ea3339840587ba02f&imgtype=0&src=http%3A%2F%2Fwww.quaintfab.com%2FUploads%2Fimage%2F20160112%2F20160112032125_79518.jpg]]></PicUrl><Url><![CDATA[http://1809zhaokai.comcto.com/weixin/goods_detail/".$goodsinfo->id."]]></Url></item></Articles></xml>";
+//                }else{
+//                    $uin = $this->get_user($oid);
+////                    dd($uin);
+//                    $key = explode('_',$res->EventKey);
+//                    $tmp = [
+//                        'openid'=>$oid,
+//                        'openid_type'=>$key[1],
+//                        'ticket'=>$res->Ticket,
+//                        'nickname'=>$uin['nickname'],
+//                        'sex'=>$uin['sex'],
+//                        'city'=>$uin['city']
+//                    ];
+//                    Tmp::insert($tmp);
+//                    echo "<xml><ToUserName><![CDATA[$oid]]></ToUserName><FromUserName><![CDATA[$gzhid]]></FromUserName><CreateTime>".time()."</CreateTime><MsgType><![CDATA[news]]></MsgType><ArticleCount>1</ArticleCount><Articles><item><Title><![CDATA[".$goodsinfo->goods_name."]]></Title><Description><![CDATA[iphone不好用了，能支持国产了！]]></Description><PicUrl><![CDATA[https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1556079981426&di=741f4c19088db58ea3339840587ba02f&imgtype=0&src=http%3A%2F%2Fwww.quaintfab.com%2FUploads%2Fimage%2F20160112%2F20160112032125_79518.jpg]]></PicUrl><Url><![CDATA[http://1809zhaokai.comcto.com/weixin/goods_detail/".$goodsinfo->id."]]></Url></item></Articles></xml>";
+//                }
             }else if($res->Event=='subscribe'){
                 //查询用户存在不存在
                 $u = Weixin::where('openid',$oid)->first();
