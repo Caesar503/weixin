@@ -102,3 +102,5 @@ Route::get('/weixin/huanying','WXController@huanying');
 
 //签到
 Route::get('/weixin/qq','WXController@qq');
+//
+Route::get('/weixin/qiandao','WXController@qiandao');

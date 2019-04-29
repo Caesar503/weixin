@@ -289,7 +289,7 @@ class WXController extends Controller
     }
     public function qq()
     {
-//        echo urlencode("http://1809zhaokai.comcto.com/weixin/qiandao");
+//        echo urlencode("https://1809zhaokai.comcto.com/weixin/qiandao");die;
 ////        http%3A%2F%2F1809zhaokai.comcto.com%2Fweixin%2Fqq
         $url = "https://open.weixin.qq.com/connect/oauth2/authorize?appid=wx9beeb571b5118194&redirect_uri=http%3A%2F%2F1809zhaokai.comcto.com%2Fweixin%2Fqiandao&response_type=code&scope=snsapi_userinfo&state=STATE#wechat_redirect";
         header("Refresh:0;url=".$url);
