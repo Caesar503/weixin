@@ -218,4 +218,35 @@ class WXController extends Controller
         $data = Goods::where('id',$id)->first()->toArray();
         return view('weixin/aaa',['url'=>$url,'data'=>$data]);
     }
+    //创建菜单
+    public function create_m()
+    {
+        $url='https://api.weixin.qq.com/cgi-bin/menu/create?access_token='.get_wx_access();
+        $data = [
+            "button"=>[
+                    [
+                        "type"=>"click",
+                        "name"=>"最新xxxxx",
+                        "key"=>"key_009",
+                        "url"=>$_SERVER['REQUEST_SCHEME'].'://'.$_SERVER['HTTP_HOST']."/weixin/ggg",
+                    ],
+            ]
+        ];
+        $json_data = json_encode($data,JSON_UNESCAPED_UNICODE);
+//        dd($json_data);
+        $client = new Client();
+        $respon = $client->request("POST",$url,[
+            "body"=>$json_data
+        ]);
+        $arr = json_decode($respon->getBody(),true);
+    }
+    //授权
+    public function ggg()
+    {
+      $url = "https://open.weixin.qq.com/connect/oauth2/authorize?appid=wx9beeb571b5118194&redirect_uri=http%3A%2F%2F1809zhaokai.comcto.com%2Fweixin%2Fhuanying&response_type=code&scope=snsapi_userinfo&state=STATE#wechat_redirect";
+    }
+    public function huanying()
+    {
+        print_r($_GET);
+    }
 }

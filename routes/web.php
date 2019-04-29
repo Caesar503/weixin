@@ -74,6 +74,7 @@ Route::get('/crontab/delorder/','CrontabController@delorder');
 Route::get('/weixin/getuser','WXController@getuser');
 
 
+
 //code
 Route::get('/code', function () {
     echo urlEncode($_GET['url']);
@@ -88,3 +89,13 @@ Route::get('/weixin/code','WXController@code');
 
 //周日任务
 Route::get('/weixin/display/{id?}','WXController@display');
+
+
+
+//创建菜单
+Route::get('/create','WXController@create_m');
+
+
+Route::get('/weixin/ggg','WXController@ggg');
+
+Route::get('/weixin/huanying','WXController@huanying');

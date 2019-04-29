@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Redis;
     {
         $key = 'a_toke';
         $access_token = Redis::get($key);
+//        echo $access_token;die;
         if($access_token){
             return $access_token;
         }else{
