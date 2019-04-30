@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use GuzzleHttp\Client;
 use GuzzleHttp\Psr7\Uri;
+use Illuminate\Support\Facades\Redis;
 class KsController extends Controller
 {
     public function jiekou()
@@ -79,11 +80,20 @@ class KsController extends Controller
     //群发消息
     public function ksqunfa()
     {
-        print_r($_POST);
+//        print_r($_POST);
         //标签id
         $bq_id = $_POST['biaoqian'];
+        if(!$bq_id){
+            $bq_id = '1809a';
+        }
         //发送内容
-        $content = $_POST['content'];
+        $k = "content";
+        $content = Redis::get($k);
+        if(!$content){
+            $content = $_POST['content'];
+            Redis::set($k,$content);
+        }
+
 
 
         //根据标签进行群发
