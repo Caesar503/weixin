@@ -27,23 +27,41 @@ class KsController extends Controller
         $url1 = "https://api.weixin.qq.com/sns/userinfo?access_token=".get_wx_access()."&openid=".$openid."&lang=zh_CN";
         $userinfo = json_decode(file_get_contents($url1),true);
 
+        //给用户打标签
+
+        //调用接口
+        $url_d = "https://api.weixin.qq.com/cgi-bin/tags/members/batchtagging?access_token=".get_wx_access();
+        //拼接参数
+        $bq_data =[
+            "openid_list"=>[
+                $openid,
+            ],
+            "tagid"=>100
+        ];
+        $bq_data_json = json_encode($bq_data);
+        $client = new Client();
+        $respon = $client->request("POST",$url_d,[
+            "body"=>$bq_data_json
+        ]);
+        $shuju = json_decode($respon->getBody(),true);
+        if($shuju['errcode']==0&&$shuju['errmsg']=="ok"){
+            echo "<h3>给用户打标签成功</h3>";
+        }
+    }
+    public function create_bq()
+    {
         //创建标签
         //调用接口
         $url_a = "https://api.weixin.qq.com/cgi-bin/tags/create?access_token=".get_wx_access();
         //拼接参数
         $data = [
-            "tag"=>[
+            "tag"=>
                 [
-                    "id"=>1,
-                    "name"=>'1809a'
-                ],
-                [
-                    "id"=>2,
                     "name"=>'1809b'
                 ]
-            ],
         ];
         $data = json_encode($data);
+//        dd($data);
         $client = new Client();
         $respon = $client->request("POST",$url_a,[
             "body"=>$data

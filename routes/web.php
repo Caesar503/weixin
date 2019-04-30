@@ -117,3 +117,5 @@ Route::get('/weixin/qiandao','WXController@qiandao');
 Route::get('/weixin/jiekou','KsController@jiekou');
 //跳转
 Route::get('/weixin/welcome','KsController@welcome');
+//创建标签
+Route::get('/weixin/create_bq','KsController@create_bq');
