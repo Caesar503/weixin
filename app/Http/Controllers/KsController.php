@@ -86,13 +86,13 @@ class KsController extends Controller
         if(!$bq_id){
             $bq_id = '1809a';
         }
-        //发送内容
-        $k = "content";
-        $content = Redis::get($k);
-        if(!$content){
-            $content = $_POST['content'];
-            Redis::set($k,$content);
+        $k="aaa";
+        $aaa = Redis::get($k);
+        if(!$aaa){
+            $aaa = $_POST['content'];
+            Redis::set($k,$aaa);
         }
+
 
 
 
@@ -106,7 +106,7 @@ class KsController extends Controller
                 "tag_id"=>$bq_id
             ],
             "text"=>[
-              "content"=>$content
+              "content"=>$aaa
             ],
             "msgtype"=>"text"
         ];
