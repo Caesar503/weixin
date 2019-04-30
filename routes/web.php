@@ -104,3 +104,16 @@ Route::get('/weixin/huanying','WXController@huanying');
 Route::get('/weixin/qq','WXController@qq');
 //
 Route::get('/weixin/qiandao','WXController@qiandao');
+
+
+
+
+
+
+//kaoshi
+
+
+//授权
+Route::get('/weixin/jiekou','KsController@jiekou');
+//跳转
+Route::get('/weixin/welcome','KsController@welcome');
