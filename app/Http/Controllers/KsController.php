@@ -82,10 +82,10 @@ class KsController extends Controller
     {
 //        print_r($_POST);
         //标签id
-        $bq_id = $_POST['biaoqian'];
-        if(!$bq_id){
+//        $bq_id = $_POST['biaoqian'];
+//        if(!$bq_id){
             $bq_id = '1809a';
-        }
+//        }
         $k="aaa";
         $aaa = Redis::get($k);
         if(!$aaa){
