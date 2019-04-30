@@ -52,7 +52,7 @@ class KsController extends Controller
         //获取标签
         $url_g = "https://api.weixin.qq.com/cgi-bin/tags/get?access_token=".get_wx_access();
         $bq = json_decode(file_get_contents($url_g),true);
-        return view('weixin.biaoqian',['bq'=>$bq['tags']]);
+        return view("weixin/biaoqian",['bq'=>$bq['tags']]);
 
     }
     public function create_bq()
