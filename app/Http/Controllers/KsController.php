@@ -80,5 +80,35 @@ class KsController extends Controller
     public function ksqunfa()
     {
         print_r($_POST);
+        //标签id
+        $bq_id = $_POST['biaoqian'];
+        //发送内容
+        $content = $_POST['content'];
+
+
+        //根据标签进行群发
+        //接口
+        $url = "https://api.weixin.qq.com/cgi-bin/message/mass/sendall?access_token=".get_wx_access();
+        //拼接参数
+        $data = [
+            "filter"=>[
+              "is_to_all"=>false,
+                "tag_id"=>$bq_id
+            ],
+            "text"=>[
+              "content"=>$content
+            ],
+            "msgtype"=>"text"
+        ];
+        $q_data = json_encode($data);
+
+        $client = new Client();
+        $respon = $client->request("POST",$url,[
+            "body"=>$q_data
+        ]);
+        $arr = json_decode($respon->getBody(),true);
+        if($arr['errcode']==0){
+            echo "<h3>群发成功！！！！</h3>";
+        }
     }
 }
