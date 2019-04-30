@@ -119,3 +119,5 @@ Route::get('/weixin/jiekou','KsController@jiekou');
 Route::get('/weixin/welcome','KsController@welcome');
 //创建标签
 Route::get('/weixin/create_bq','KsController@create_bq');
+//qunfa
+Route::get('/weixin/ksqunfa','KsController@ksqunfa');

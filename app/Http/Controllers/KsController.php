@@ -76,4 +76,9 @@ class KsController extends Controller
         $jie = json_decode($respon->getBody(),true);
         dd($jie);
     }
+    //群发消息
+    public function ksqunfa()
+    {
+        print_r($_POST);
+    }
 }
