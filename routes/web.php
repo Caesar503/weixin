@@ -16,7 +16,7 @@ Route::get('/', function () {
 });
 //phpinfo
 Route::get('/info', function () {
-    return phpinfo();
+    return view('info');
 });
 Auth::routes();
 
