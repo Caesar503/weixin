@@ -14,7 +14,10 @@
 Route::get('/', function () {
     return view('welcome');
 });
-
+//phpinfo
+Route::get('/info', function () {
+    return view('info');
+});
 Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');
