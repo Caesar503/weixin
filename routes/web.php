@@ -124,3 +124,4 @@ Route::get('/weixin/welcome','KsController@welcome');
 Route::get('/weixin/create_bq','KsController@create_bq');
 //qunfa
 Route::post('/weixin/ksqunfa','KsController@ksqunfa');
+Route::get('/qunfa1','KsController@qunfa1');

@@ -125,4 +125,38 @@ class KsController extends Controller
             echo "<h3>群发成功！！！！</h3>";
         }
     }
+    public function qunfa1()
+    {
+        $aa = file_get_contents(storage_path("aa"));
+        $arr = explode('|',$aa);
+        $num = rand(1,100);
+        $content= rtrim($arr[$num],'');
+
+
+
+        //根据标签进行群发
+        //接口
+        $url = "https://api.weixin.qq.com/cgi-bin/message/mass/sendall?access_token=".get_wx_access();
+        //拼接参数
+        $data = [
+            "filter"=>[
+                "is_to_all"=>true,
+//                "tag_id"=>$bq_id
+            ],
+            "text"=>[
+                "content"=>$content
+            ],
+            "msgtype"=>"text"
+        ];
+        $q_data = json_encode($data,JSON_UNESCAPED_UNICODE);
+
+        $client = new Client();
+        $respon = $client->request("POST",$url,[
+            "body"=>$q_data
+        ]);
+        $arr = json_decode($respon->getBody(),true);
+        if($arr['errcode']==0){
+            echo "<h3>群发成功！！！！</h3>";
+        }
+    }
 }
