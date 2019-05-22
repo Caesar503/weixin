@@ -11,7 +11,7 @@ class WxPayController extends Controller
     //统一接口
     public $only = "https://api.mch.weixin.qq.com/pay/unifiedorder";
     //回调接口
-    public $notify = "http://1809zhaokai.comcto.com/Weixin/pay_notify";
+    public $notify = "http://passport.zjdgz.com/Weixin/pay_notify";
     //测试
     public function pay($id)
     {
@@ -54,8 +54,8 @@ class WxPayController extends Controller
         $res = $this->postXmlCurl($xml,$this->only, $useCert = false, $second = 30);
         $res = simplexml_load_string($res);
         $url = $res->code_url;
-
-        return view('weixin.test',['url'=>$url,'oid'=>$orderinfo->id]);
+        $oid = $orderinfo->id;
+//        return view('weixin.test',['url'=>$url,'oid'=>$orderinfo->id]);
     }
     public function SetSign()
     {
@@ -145,9 +145,9 @@ class WxPayController extends Controller
     }
     //查询支付状态
     public function findpay($id){
-       $pay = Order::where(['id'=>$id,'uid'=>Auth::id()])->first();
+       $pay = Order::where(['id'=>$id])->first();
         if($pay){
-            if($pay->pay_time>0){
+            if($pay->pay_status>0){
                 $data = [
                     'status'=>'success',
                     'code'=>200
@@ -159,7 +159,11 @@ class WxPayController extends Controller
                 ];
             }
         }else{
-            die('订单不存在');
+            $data = [
+                'status'=>'订单不存在或者订单已经支付过了',
+                'code'=>45
+            ];
+
         }
 
         return json_encode($data);

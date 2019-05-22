@@ -87,12 +87,16 @@ class KsController extends Controller
             $bq_id = '1809a';
         }
         //发送内容
-        $k = "content";
-        $content = Redis::get($k);
-        if(!$content){
-            $content = $_POST['content'];
-            Redis::set($k,$content);
-        }
+//        $k = "content";
+//        $content = Redis::get($k);
+//        if(!$content){
+//            $content = $_POST['content'];
+//            Redis::set($k,$content);
+//        }
+        $aa = file_get_contents(storage_path("aa"));
+        $arr = explode('|',$aa);
+        $num = rand(1,100);
+        $content= rtrim($arr[$num],'');
 
 
 
@@ -102,8 +106,8 @@ class KsController extends Controller
         //拼接参数
         $data = [
             "filter"=>[
-              "is_to_all"=>false,
-                "tag_id"=>$bq_id
+              "is_to_all"=>true,
+//                "tag_id"=>$bq_id
             ],
             "text"=>[
               "content"=>$content
