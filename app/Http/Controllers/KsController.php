@@ -114,7 +114,7 @@ class KsController extends Controller
             ],
             "msgtype"=>"text"
         ];
-        $q_data = json_encode($data);
+        $q_data = json_encode($data,JSON_UNESCAPED_UNICODE);
 
         $client = new Client();
         $respon = $client->request("POST",$url,[
